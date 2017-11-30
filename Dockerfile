@@ -1,4 +1,4 @@
-FROM node:carbon
+FROM mhart/alpine-node:6
 
 # Create app directory
 WORKDIR /usr/src/app

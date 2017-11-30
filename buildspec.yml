@@ -3,18 +3,24 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo Nothing to do in the install phase...
+      - echo Starting the docker daemon and waiting
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&
+      # - timeout -t 15 sh -c "until docker info; do echo .; sleep 1; done"
+      - sleep 10
+      - echo "docker daemon should be up"
   pre_build:
     commands:
       - echo Nothing to do in the pre_build phase...
+      - docker -v
   build:
     commands:
       - echo Build started on `date`
-      - make build
+      - docker build -t parthpatel1001/test_simple_node .
   post_build:
     commands:
-      - make push
       - echo Build completed on `date`
+      - docker login --username parthpatel1001 --password $(cat dockerpassword.txt)
+      - docker push parthpatel1001/test_simple_node
 artifacts:
   type:
       - "NO_ARTIFACTS"
