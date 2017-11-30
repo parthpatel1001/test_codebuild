@@ -1,4 +1,5 @@
 IMAGE_TAG=parthpatel1001/test_simple_node
+S3_BUCKET=codebuild-sandbox-source-parth-test
 
 ci: build
 	echo "ci complete"
@@ -18,3 +19,7 @@ pull:
 
 run:
 	docker run -p 49160:8080 $(IMAGE_TAG)
+
+zip_s3:
+	zip /tmp/source.zip *
+	aws s3 cp /tmp/source.zip s3://$(S3_BUCKET)
